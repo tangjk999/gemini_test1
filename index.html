@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemini 粒子效果测试项目</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #0a0a0a;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 800px;
+            width: 90%;
+            margin: 50px auto;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        h1 {
+            color: #ffffff;
+            margin-bottom: 1rem;
+            font-size: 3rem;
+            font-weight: 300;
+            text-shadow: 0 0 20px rgba(102, 126, 234, 0.5);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 20px rgba(102, 126, 234, 0.5);
+            }
+            to {
+                text-shadow: 0 0 30px rgba(102, 126, 234, 0.8), 0 0 40px rgba(102, 126, 234, 0.6);
+            }
+        }
+
+        p {
+            color: #e2e8f0;
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+        }
+
+        .btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 40px;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 500;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.5);
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .feature {
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+        }
+
+        .feature:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(102, 126, 234, 0.5);
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.2);
+        }
+
+        .feature h3 {
+            color: #ffffff;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .feature p {
+            color: #cbd5e0;
+            font-size: 1rem;
+            margin: 0;
+        }
+
+        .controls {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 1rem;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .control-btn {
+            background: rgba(102, 126, 234, 0.3);
+            color: white;
+            border: 1px solid rgba(102, 126, 234, 0.5);
+            padding: 8px 15px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .control-btn:hover {
+            background: rgba(102, 126, 234, 0.5);
+        }
+
+        .control-btn.active {
+            background: rgba(102, 126, 234, 0.8);
+        }
+    </style>
+</head>
+<body>
+    <div id="particles-js"></div>
+    
+    <div class="controls">
+        <button class="control-btn active" onclick="toggleParticles()">粒子效果</button>
+        <button class="control-btn" onclick="changeColor()">切换颜色</button>
+        <button class="control-btn" onclick="toggleAnimation()">动画控制</button>
+    </div>
+
+    <div class="container">
+        <h1>✨ 粒子效果世界 ✨</h1>
+        <p>体验动态粒子背景的奇妙效果，感受科技与艺术的完美结合</p>
+        
+        <button class="btn" onclick="triggerEffect()">触发特效</button>
+        
+        <div class="features">
+            <div class="feature">
+                <h3>🎨 动态粒子</h3>
+                <p>实时生成的粒子系统，每个粒子都有独特的运动轨迹和交互效果</p>
+            </div>
+            <div class="feature">
+                <h3>⚡ 交互响应</h3>
+                <p>鼠标移动时粒子会产生吸引效果，点击时触发爆炸动画</p>
+            </div>
+            <div class="feature">
+                <h3>🌈 色彩变换</h3>
+                <p>支持多种颜色主题切换，营造不同的视觉氛围</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        // 粒子配置
+        let particlesConfig = {
+            particles: {
+                number: {
+                    value: 80,
+                    density: {
+                        enable: true,
+                        value_area: 800
+                    }
+                },
+                color: {
+                    value: "#667eea"
+                },
+                shape: {
+                    type: "circle",
+                    stroke: {
+                        width: 0,
+                        color: "#000000"
+                    }
+                },
+                opacity: {
+                    value: 0.5,
+                    random: false,
+                    anim: {
+                        enable: false,
+                        speed: 1,
+                        opacity_min: 0.1,
+                        sync: false
+                    }
+                },
+                size: {
+                    value: 3,
+                    random: true,
+                    anim: {
+                        enable: false,
+                        speed: 40,
+                        size_min: 0.1,
+                        sync: false
+                    }
+                },
+                line_linked: {
+                    enable: true,
+                    distance: 150,
+                    color: "#667eea",
+                    opacity: 0.4,
+                    width: 1
+                },
+                move: {
+                    enable: true,
+                    speed: 6,
+                    direction: "none",
+                    random: false,
+                    straight: false,
+                    out_mode: "out",
+                    bounce: false,
+                    attract: {
+                        enable: false,
+                        rotateX: 600,
+                        rotateY: 1200
+                    }
+                }
+            },
+            interactivity: {
+                detect_on: "canvas",
+                events: {
+                    onhover: {
+                        enable: true,
+                        mode: "repulse"
+                    },
+                    onclick: {
+                        enable: true,
+                        mode: "push"
+                    },
+                    resize: true
+                },
+                modes: {
+                    grab: {
+                        distance: 400,
+                        line_linked: {
+                            opacity: 1
+                        }
+                    },
+                    bubble: {
+                        distance: 400,
+                        size: 40,
+                        duration: 2,
+                        opacity: 8,
+                        speed: 3
+                    },
+                    repulse: {
+                        distance: 200,
+                        duration: 0.4
+                    },
+                    push: {
+                        particles_nb: 4
+                    },
+                    remove: {
+                        particles_nb: 2
+                    }
+                }
+            },
+            retina_detect: true
+        };
+
+        let particlesEnabled = true;
+        let animationEnabled = true;
+        let currentColorIndex = 0;
+        const colors = [
+            "#667eea", "#764ba2", "#f093fb", "#f5576c", 
+            "#4facfe", "#00f2fe", "#43e97b", "#38f9d7"
+        ];
+
+        // 初始化粒子
+        particlesJS('particles-js', particlesConfig);
+
+        // 切换粒子效果
+        function toggleParticles() {
+            const btn = event.target;
+            if (particlesEnabled) {
+                pJSDom[0].pJS.pJS_dom.pJS_canvas.style.display = 'none';
+                particlesEnabled = false;
+                btn.classList.remove('active');
+            } else {
+                pJSDom[0].pJS.pJS_dom.pJS_canvas.style.display = 'block';
+                particlesEnabled = true;
+                btn.classList.add('active');
+            }
+        }
+
+        // 切换颜色
+        function changeColor() {
+            currentColorIndex = (currentColorIndex + 1) % colors.length;
+            const newColor = colors[currentColorIndex];
+            
+            // 更新粒子颜色
+            pJSDom[0].pJS.pJS_particles.array.forEach(particle => {
+                particle.color.value = newColor;
+            });
+            
+            // 更新连线颜色
+            particlesConfig.particles.line_linked.color = newColor;
+            particlesConfig.particles.color.value = newColor;
+            
+            // 重新初始化
+            pJSDom[0].pJS.fn.particlesRefresh();
+        }
+
+        // 切换动画
+        function toggleAnimation() {
+            const btn = event.target;
+            if (animationEnabled) {
+                pJSDom[0].pJS.pJS_particles.move.enable = false;
+                animationEnabled = false;
+                btn.classList.remove('active');
+            } else {
+                pJSDom[0].pJS.pJS_particles.move.enable = true;
+                animationEnabled = true;
+                btn.classList.add('active');
+            }
+        }
+
+        // 触发特效
+        function triggerEffect() {
+            // 创建爆炸效果
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                    const particle = pJSDom[0].pJS.pJS_particles.array[Math.floor(Math.random() * pJSDom[0].pJS.pJS_particles.array.length)];
+                    if (particle) {
+                        particle.size.value = 10;
+                        particle.opacity.value = 1;
+                        setTimeout(() => {
+                            particle.size.value = 3;
+                            particle.opacity.value = 0.5;
+                        }, 500);
+                    }
+                }, i * 50);
+            }
+        }
+
+        // 页面加载完成后的效果
+        document.addEventListener('DOMContentLoaded', function() {
+            const features = document.querySelectorAll('.feature');
+            
+            // 特性卡片悬停效果
+            features.forEach(feature => {
+                feature.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-10px) scale(1.02)';
+                });
+                
+                feature.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+
+            // 添加鼠标跟随效果
+            document.addEventListener('mousemove', function(e) {
+                if (particlesEnabled) {
+                    const mouseX = e.clientX;
+                    const mouseY = e.clientY;
+                    
+                    // 创建鼠标附近的粒子
+                    if (Math.random() < 0.1) {
+                        const particle = {
+                            x: mouseX,
+                            y: mouseY,
+                            vx: (Math.random() - 0.5) * 2,
+                            vy: (Math.random() - 0.5) * 2,
+                            size: Math.random() * 3 + 1
+                        };
+                        
+                        // 这里可以添加粒子到系统中
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html> 
